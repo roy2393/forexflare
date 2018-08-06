@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "253119597614",
+    "firebase_url": "https://forex-flares.firebaseio.com",
+    "project_id": "forex-flares",
+    "storage_bucket": "forex-flares.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:253119597614:android:d20283b40489bf5a",
+        "android_client_info": {
+          "package_name": "com.forexflaresapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "253119597614-tdo7d935oqdda1612iaqu9iffctiekia.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAoG9s0yBCL0xMKL3OsLrJAy1V8tlbnvnA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
