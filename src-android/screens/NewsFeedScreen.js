@@ -5,9 +5,17 @@ import {
         View,
         ListView,
         ActivityIndicator,
-        Image
+        Image,
+        Linking
     } from 'react-native';
-    import * as rssParser from 'react-native-rss-parser';
+import * as rssParser from 'react-native-rss-parser';
+import firebase from 'react-native-firebase';
+import AppConstants from '../../utils/AppConstants';
+
+const Banner = firebase.admob.Banner;
+const AdRequest = firebase.admob.AdRequest;
+const request = new AdRequest();
+request.addKeyword('foobar');
 
 const thumbnail = 'http://forexflares.com/wp-content/uploads/2018/06/forexflares-65x65.png';
 class NewsFeedScreen extends React.Component{
@@ -23,6 +31,7 @@ class NewsFeedScreen extends React.Component{
             _data: null,
             _nextPage: 0,
         };
+
     }
 
     _fetchData(callback) {
@@ -41,6 +50,7 @@ class NewsFeedScreen extends React.Component{
 
     _fetchMore() {
         this.fetchData(responseJson => {
+          
           const data = this.state._data.concat(responseJson.items);
           const _nextPage = this.state._nextPage + 1;
           this.setState({
@@ -53,8 +63,10 @@ class NewsFeedScreen extends React.Component{
     }
 
     componentDidMount() {
-        //Start getting the first batch of data from reddit
+        //Start getting the first batch of data from froex flares
+        console.log("ADVORD - ", Banner, AdRequest, request.build());
         this.fetchData(responseJson => {
+          // console.log("Response data - ", responseJson);
           let ds = new ListView.DataSource({
             rowHasChanged: (r1, r2) => r1 !== r2,
           });
@@ -68,6 +80,14 @@ class NewsFeedScreen extends React.Component{
           });
         });
       }
+      _openArticleLink(article){
+        try{
+          let url = Array.isArray(article.links) && article.links.length ? article.links[0].url : article.id;
+          Linking.openURL(url).catch(err => console.error('An error occurred', err));
+        } catch(err){
+          console.log("Error opening article - ", err);
+        }
+      }
 
       render() {
         if (this.state.isLoading) {
@@ -78,6 +98,15 @@ class NewsFeedScreen extends React.Component{
           );
         } else {
           return (
+          <View>
+            <Banner
+              unitId={AppConstants.ADMOB_UNIT_ID}
+              size={"LARGE_BANNER"}
+              request={request.build()}
+              onAdLoaded={() => {
+                console.log('Advert loaded');
+              }}
+            />
             <ListView
               dataSource={this.state.dataSource}
               renderRow={rowData => {
@@ -95,7 +124,7 @@ class NewsFeedScreen extends React.Component{
                       />
                     </View>
                     <View style={{ flex: 1 }}>
-                      <Text style={styles.title}>
+                      <Text style={styles.title} onPress={() => this._openArticleLink(rowData)}>
                         {rowData.title}
                       </Text>
                       <Text style={styles.subtitle}>
@@ -116,6 +145,7 @@ class NewsFeedScreen extends React.Component{
                 );
               }}
             />
+          </View>
           );
         }
       }
@@ -151,7 +181,7 @@ const styles = StyleSheet.create({
         textAlign: 'left',
         margin: 6,
       },
-    });
+});
     
 
 export default NewsFeedScreen;

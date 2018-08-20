@@ -1,14 +1,5 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
-
 import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View} from 'react-native';
-// import Firebase from './config/firebase';
 import AndroidApp from './index.android';
 
 const instructions = Platform.select({
@@ -18,18 +9,17 @@ const instructions = Platform.select({
     'Shake or press menu button for dev menu',
 });
 
-// const App = Platform.select({
-//   ios: AndroidApp,
-//   android: AndroidApp
-// })
+const MainApp = Platform.select({
+  ios: AndroidApp,
+  android: AndroidApp
+})
 export default class App extends Component{
   constructor(props){
     super(props);
-    // Firebase.initialise();
   }
   render() {
     return (
-      <AndroidApp />
+      <MainApp />
     );
   }
 }

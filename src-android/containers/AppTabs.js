@@ -18,7 +18,6 @@ class AppTab extends React.Component{
 
     
     render(){
-        console.log('App Tabs', this.props);
         return (
             <TabNav screenProps={{navigation: this.props.screenProps.navigation}}/>
 

@@ -26,6 +26,21 @@ export default styles = StyleSheet.create({
         fontSize: 18,
         height: 80,
       },
+    balloon: {
+        paddingHorizontal: 15,
+        paddingTop: 10,
+        paddingBottom: 15,
+        borderRadius: 20,
+        marginBottom: 20
+     },
+    messageTxt: {
+        color: 'white',
+        fontSize: 16,
+    },
+    messageDate: {
+        color: '#ccc',
+        fontSize: 12,
+    },
     safeArea: { flex: 1, backgroundColor: '#fff' }
 
 });
