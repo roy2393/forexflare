@@ -116,7 +116,7 @@ export default class LoginForm extends React.Component {
               placeholder={'Code ... '}
               value={codeInput}
             />
-            <Button title="Confirm Code" color="#841584" onPress={this.confirmCode} />
+            <Button title="Confirm Code" color="green" onPress={this.confirmCode} />
 
             <Text style={{color: 'blue'}}
                 onPress={() => {this.setState({confirmResult: false})}}>

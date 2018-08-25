@@ -31,7 +31,7 @@ componentDidMount() {
     });
 
     firebase.admob().initialize(AppConst.ADMOB_ID);
-    firebase.admob().openDebugMenu();
+    // firebase.admob().openDebugMenu();
   }
 
     getMessagePermission = async () => {

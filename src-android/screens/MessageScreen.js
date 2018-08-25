@@ -8,8 +8,6 @@ import {
         FlatList,
         AsyncStorage
     } from 'react-native';
-import * as rssParser from 'react-native-rss-parser';
-// import styles from '../styles/styles';
 import firebase from 'react-native-firebase';
 import type { RemoteMessage } from 'react-native-firebase';
 import type { Notification, NotificationOpen } from 'react-native-firebase';
@@ -141,8 +139,10 @@ class MessageScreen extends React.Component{
                         console.log("render - ",arguments);
                         let date = new Date(parseInt(item.timestamp));
                         return (
-                        <View style={[styles.balloon,{backgroundColor: '#1084ff'}]}>
-                            <Text style={styles.messageTxt}>{item.message}</Text>
+                        <View>
+                            <View style={[styles.balloon,{backgroundColor: '#1084ff'}]}>
+                                <Text style={styles.messageTxt}>{item.message}</Text>
+                            </View>
                             <Text style={styles.messageDate}>{date.toDateString() + ", "+ date.toLocaleTimeString()}</Text>
                         </View>
                         )}
@@ -176,9 +176,9 @@ class MessageScreen extends React.Component{
 const styles = StyleSheet.create({
     balloon: {
         paddingHorizontal: 15,
-        paddingTop: 10,
-        paddingBottom: 15,
-        borderRadius: 20,
+        paddingTop: 5,
+        paddingBottom: 5,
+        borderRadius: 15,
         marginBottom: 20
      },
     messageTxt: {
@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
     },
     messageDate: {
         color: '#ccc',
-        fontSize: 12,
+        fontSize: 11,
     },
     safeArea: { 
         flex: 1, 

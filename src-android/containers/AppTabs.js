@@ -1,7 +1,7 @@
 import React from 'react';
 import { createMaterialTopTabNavigator } from 'react-navigation';
 import NewsFeed from '../screens/NewsFeedScreen';
-import Messages from '../screens/MessageScreen';
+import Messages from '../screens/MessageScreen2';
 import * as AppConst from '../../utils/AppConstants';
 
 export const TabNav = createMaterialTopTabNavigator({

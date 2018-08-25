@@ -104,7 +104,7 @@ class NewsFeedScreen extends React.Component{
               size={"LARGE_BANNER"}
               request={request.build()}
               onAdLoaded={() => {
-                console.log('Advert loaded');
+                console.log('Ad');
               }}
             />
             <ListView
