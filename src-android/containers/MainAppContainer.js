@@ -4,14 +4,43 @@ import {
         View,
         Button
     } from 'react-native';
+import { DrawerNavigator, StackNavigator } from 'react-navigation';
+import DrawerContent from "../components/DrawerContent"
+import Browser from "../components/Browser";
 import AppConst from '../../utils/AppConstants';
 import AppTabs from './AppTabs';
 import firebase from 'react-native-firebase';
 
+
+
+const InnerStackNavigator = StackNavigator(
+    {
+        TabNavigator: {
+            screen: AppTabs,
+        },
+        Browser: {screen: Browser}
+    }
+);
+
+const Drawer = DrawerNavigator({
+    Home: { screen: InnerStackNavigator}
+  }, 
+  {
+    contentComponent: DrawerContent,
+    drawerWidth: 250,
+    drawerPosition: 'left',
+    drawerOpenRoute: 'DrawerOpen',
+    drawerCloseRoute: 'DrawerClose',
+    drawerToggleRoute: 'DrawerToggle',
+  });
+
 class MainAppContainer extends React.Component{
 
-    static navigationOptions = AppConst.NAVIGATION_OPTTIONS;
-    
+    // static navigationOptions = AppConst.NAVIGATION_OPTTIONS;
+    static navigationOptions = {
+        header: null,
+        };
+
     constructor(props){
         super(props);
         firebase.messaging().hasPermission()
@@ -44,7 +73,8 @@ componentDidMount() {
     }
     render(){
         return (
-            <AppTabs screenProps={{navigation: this.props.navigation}}/>
+            <Drawer screenProps={{navigation: this.props.navigation}}/>
+            // <AppTabs screenProps={{navigation: this.props.navigation}}/>
         )
     }
 }

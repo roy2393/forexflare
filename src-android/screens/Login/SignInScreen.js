@@ -11,7 +11,7 @@ import AppConst from '../../../utils/AppConstants';
 import firebase from 'react-native-firebase';
 
 export default class LoginForm extends React.Component {
-    static navigationOptions = AppConst.NAVIGATION_OPTTIONS;
+    static navigationOptions = AppConst.NAVIGATION_OPTIONS;
 
     constructor(props) {
         super(props);
