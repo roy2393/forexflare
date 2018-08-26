@@ -1,5 +1,5 @@
 export default {
-    NAVIGATION_OPTTIONS:{
+    NAVIGATION_OPTIONS:{
     title: 'Forex Flares',
         headerStyle: {
         backgroundColor: '#3498db',

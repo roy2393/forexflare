@@ -83,7 +83,9 @@ class NewsFeedScreen extends React.Component{
       _openArticleLink(article){
         try{
           let url = Array.isArray(article.links) && article.links.length ? article.links[0].url : article.id;
-          Linking.openURL(url).catch(err => console.error('An error occurred', err));
+          // Linking.openURL(url).catch(err => console.error('An error occurred', err));
+          console.log("Open link 0 ", this.props);
+          this.props.screenProps.navigation.navigate('Browser', {uri: url});
         } catch(err){
           console.log("Error opening article - ", err);
         }
