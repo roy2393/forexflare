@@ -6,7 +6,7 @@ import {
         Button,
         TouchableHighlight
     } from 'react-native';
-import styles from '../../styles/styles';
+import PhoneInput from 'react-native-phone-input'
 import AppConst from '../../../utils/AppConstants';
 import firebase from 'react-native-firebase';
 
@@ -20,7 +20,6 @@ export default class LoginForm extends React.Component {
           user: null,
           message: '',
           codeInput: '',
-          phoneNumber: '+91',
           confirmResult: null,
         };
       }
@@ -38,7 +37,6 @@ export default class LoginForm extends React.Component {
               user: null,
               message: '',
               codeInput: '',
-              phoneNumber: '+91',
               confirmResult: null,
             });
           }
@@ -50,12 +48,16 @@ export default class LoginForm extends React.Component {
      }
    
      signIn = () => {
-       const { phoneNumber } = this.state;
+       console.log("Sign in - ", this.state , this.phone);
+       const phoneNumber = this.phone.state.formattedNumber;
        this.setState({ message: 'Sending code ...' });
    
        firebase.auth().signInWithPhoneNumber(phoneNumber)
          .then(confirmResult => this.setState({ confirmResult, message: 'Code has been sent!' }))
-         .catch(error => this.setState({ message: `Sign In With Phone Number Error: ${error.message}` }));
+         .catch((error) => {
+           console.log("Error - ", error, error.message);
+          this.setState({ message: `Sign In With Phone Number Error: ${error.message}` })
+         } );
      };
 
      confirmCode = () => {
@@ -76,18 +78,24 @@ export default class LoginForm extends React.Component {
 
 
       renderPhoneNumberInput() {
-        const { phoneNumber } = this.state;
-     
          return (
            <View style={{ padding: 25 }}>
              <Text>Enter phone number:</Text>
-             <TextInput
+             
+             <PhoneInput style={{ marginBottom: 25 }}
+              ref={ref => {
+                this.phone = ref;
+              }}
+            />
+
+
+             {/* <TextInput
                autoFocus
                style={{ height: 40, marginTop: 15, marginBottom: 15 }}
                onChangeText={value => this.setState({ phoneNumber: value })}
                placeholder={'Phone number ... '}
                value={phoneNumber}
-             />
+             /> */}
              <Button title="Sign In" color="green" onPress={this.signIn} />
            </View>
          );
