@@ -11,7 +11,6 @@ import ForgotPasswordScreen from './src-android/screens/Login/ForgotPasswordScre
 import MainAppContainer from './src-android/containers/MainAppContainer';
 import AuthLoadingScreen from './src-android/containers/AuthLoadingScreen';
 import styles from './src-android/styles/styles';
-import Firebase from './config/firebase';
 
 const AppStack = createStackNavigator(
     {
@@ -41,8 +40,6 @@ const Switch = createSwitchNavigator(
 export default class App extends React.Component {
     constructor(props){
         super(props);
-        Firebase.initialise();
-
     }
 
     render(){

@@ -4,14 +4,20 @@ import {
         TextInput, 
         View, 
         Button,
-        TouchableHighlight
+        StyleSheet,
+        Image,
+        ImageBackground,
+        TouchableOpacity
     } from 'react-native';
-import styles from '../../styles/styles';
+import PhoneInput from 'react-native-phone-input'
 import AppConst from '../../../utils/AppConstants';
 import firebase from 'react-native-firebase';
+import colors from '../../../utils/colors';
 
 export default class LoginForm extends React.Component {
-    static navigationOptions = AppConst.NAVIGATION_OPTIONS;
+  static navigationOptions = {
+    header: null,
+    };
 
     constructor(props) {
         super(props);
@@ -20,7 +26,6 @@ export default class LoginForm extends React.Component {
           user: null,
           message: '',
           codeInput: '',
-          phoneNumber: '+91',
           confirmResult: null,
         };
       }
@@ -38,7 +43,6 @@ export default class LoginForm extends React.Component {
               user: null,
               message: '',
               codeInput: '',
-              phoneNumber: '+91',
               confirmResult: null,
             });
           }
@@ -50,12 +54,27 @@ export default class LoginForm extends React.Component {
      }
    
      signIn = () => {
-       const { phoneNumber } = this.state;
-       this.setState({ message: 'Sending code ...' });
+       const phoneNumber = this.phone.state.formattedNumber;
+       this.setState({ message: 'Sending OTP code on '+ phoneNumber });
+
+      //  setTimeout(()=>{
+      //   this.setState({ confirmResult: true, message: 'Code has been sent!' })
+      //   setTimeout(() => {
+      //     this.setState({ message: '' })
+      //   }, 3000)
+      //  }, 1000);
    
        firebase.auth().signInWithPhoneNumber(phoneNumber)
-         .then(confirmResult => this.setState({ confirmResult, message: 'Code has been sent!' }))
-         .catch(error => this.setState({ message: `Sign In With Phone Number Error: ${error.message}` }));
+         .then(confirmResult => {
+          this.setState({ confirmResult, message: 'Code has been sent!' })
+          setTimeout(() => {
+            this.setState({ message: '' })
+          }, 3000)
+          })
+         .catch((error) => {
+           console.log("Error - ", error, error.message);
+          this.setState({ message: `Sign In With Phone Number Error: ${error.message}` })
+         } );
      };
 
      confirmCode = () => {
@@ -76,19 +95,19 @@ export default class LoginForm extends React.Component {
 
 
       renderPhoneNumberInput() {
-        const { phoneNumber } = this.state;
-     
          return (
-           <View style={{ padding: 25 }}>
-             <Text>Enter phone number:</Text>
-             <TextInput
-               autoFocus
-               style={{ height: 40, marginTop: 15, marginBottom: 15 }}
-               onChangeText={value => this.setState({ phoneNumber: value })}
-               placeholder={'Phone number ... '}
-               value={phoneNumber}
-             />
-             <Button title="Sign In" color="green" onPress={this.signIn} />
+           <View style={styles.inputContainer}>
+             <Text style={styles.label}>Enter phone number:</Text>
+             
+             <PhoneInput style={styles.phoneInput}
+              initialCountry='in'
+              ref={ref => {
+                this.phone = ref;
+              }}
+            />
+             <TouchableOpacity activeOpacity={0.5} style={[styles.button, styles.signIn]} onPress={this.signIn}>
+              <Text style={styles.btnText}>Sign In</Text>
+             </TouchableOpacity>
            </View>
          );
        }
@@ -99,7 +118,7 @@ export default class LoginForm extends React.Component {
         if (!message.length) return null;
     
         return (
-          <Text style={{ padding: 5, backgroundColor: '#000', color: '#fff' }}>{message}</Text>
+          <Text style={{padding: 10, backgroundColor: 'rgba(0,0,0,0.5)', color: '#fff', textAlign: 'center'}}>{message}</Text>
         );
       }
      
@@ -107,21 +126,25 @@ export default class LoginForm extends React.Component {
         const { codeInput } = this.state;
     
         return (
-          <View style={{ marginTop: 25, padding: 25 }}>
-            <Text>Enter verification code below:</Text>
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>Enter OTP:</Text>
             <TextInput
               autoFocus
-              style={{ height: 40, marginTop: 15, marginBottom: 15 }}
+              keyboardType="number-pad"
+              style={[styles.inputBox, styles.otpInput]}
               onChangeText={value => this.setState({ codeInput: value })}
               placeholder={'Code ... '}
               value={codeInput}
             />
-            <Button title="Confirm Code" color="green" onPress={this.confirmCode} />
+            <TouchableOpacity activeOpacity={0.5} style={[styles.button, styles.signIn]} onPress={this.confirmCode}>
+              <Text style={styles.btnText}>Verify</Text>
+            </TouchableOpacity>
 
-            <Text style={{color: 'blue'}}
-                onPress={() => {this.setState({confirmResult: false})}}>
-            Go Back
-          </Text>
+            <TouchableOpacity activeOpacity={0.5}>
+              <Text style={styles.goBackBtn} onPress={() => {this.setState({confirmResult: false})}}>
+                Go Back
+              </Text>
+            </TouchableOpacity>
           </View>
         );
       }
@@ -129,15 +152,82 @@ export default class LoginForm extends React.Component {
       render() {
         const { user, confirmResult } = this.state;
         return (
-          <View style={{ flex: 1 }}>
-    
+          <ImageBackground source={require('../../../assets/img/gradientBG.png')} style={styles.container}>
+
+            <Image source={require('../../../assets/img/logo.png')} style={styles.logo}/>
+
             {!user && !confirmResult && this.renderPhoneNumberInput()}
     
-            {this.renderMessage()}
     
             {!user && confirmResult && this.renderVerificationCodeInput()}
-    
-          </View>
+            <View style={styles.msgBox}>
+              {this.renderMessage()}  
+            </View>
+
+          </ImageBackground>
         );
       }
 }
+
+const styles = StyleSheet.create({
+  container: {
+     flex: 1,
+     width: '100%', 
+     height: '100%',
+     alignItems: 'center'
+  },
+  label: {
+    marginBottom: 20,
+    fontSize: 14,
+    textAlign: 'center'
+  },
+  inputBox:{
+    marginBottom: 25,
+    paddingBottom: 5,
+    borderBottomWidth: 1 ,
+    borderBottomColor: colors.inputBorder,
+  },
+  phoneInput:{
+    width: 200, 
+    marginBottom: 25,
+    paddingBottom: 5,
+    borderBottomWidth: 1 ,
+    borderBottomColor: colors.inputBorder,
+  },
+  otpInput:{
+    width: 200,
+    fontSize: 14
+  },
+  logo:{
+    marginTop: 100,
+    marginBottom: 50
+  },
+  button:{
+    backgroundColor: 'rgba(0,0,0,0.3)',
+    borderRadius: 40,
+    padding: 10,
+  },
+  signIn:{
+    
+  },
+  btnText:{
+    color: colors.white,
+    fontSize: 14,
+    textAlign: 'center'
+
+  },
+  msgBox:{
+    width: '100%',
+    height: 50,
+    marginTop: 50
+  },
+  inputContainer:{
+
+  },
+  goBackBtn:{
+    marginTop: 20, 
+    fontSize: 14, 
+    color: colors.white, 
+    textAlign: 'center'
+  }
+})
