@@ -32,6 +32,16 @@
 				<string>com.googleusercontent.apps.253119597614-r7va446vraelsl13cksq0t6v0t8fcqi5</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>Google signIn URL</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.25470249753-ot3k2fk4d7f8vcrvlel0ovd2aqj41dg2</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>

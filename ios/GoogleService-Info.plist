@@ -7,34 +7,34 @@
 	<key>AD_UNIT_ID_FOR_INTERSTITIAL_TEST</key>
 	<string>ca-app-pub-3940256099942544/4411468910</string>
 	<key>CLIENT_ID</key>
-	<string>253119597614-r7va446vraelsl13cksq0t6v0t8fcqi5.apps.googleusercontent.com</string>
+	<string>25470249753-ot3k2fk4d7f8vcrvlel0ovd2aqj41dg2.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.253119597614-r7va446vraelsl13cksq0t6v0t8fcqi5</string>
+	<string>com.googleusercontent.apps.25470249753-ot3k2fk4d7f8vcrvlel0ovd2aqj41dg2</string>
 	<key>API_KEY</key>
-	<string>AIzaSyD7RQhC8e08kRzsivBROnEhEQyGdVq4Iqo</string>
+	<string>AIzaSyD1CKPJdIP9d-7nOBq9oMm4H8lRSrHJB0o</string>
 	<key>GCM_SENDER_ID</key>
-	<string>253119597614</string>
+	<string>25470249753</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>org.reactjs.native.ForexFlaresApp</string>
 	<key>PROJECT_ID</key>
-	<string>forex-flares</string>
+	<string>forexflares-3c9d0</string>
 	<key>STORAGE_BUCKET</key>
-	<string>forex-flares.appspot.com</string>
+	<string>forexflares-3c9d0.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<true></true>
 	<key>IS_ANALYTICS_ENABLED</key>
 	<false></false>
 	<key>IS_APPINVITE_ENABLED</key>
-	<false></false>
+	<true></true>
 	<key>IS_GCM_ENABLED</key>
 	<true></true>
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:253119597614:ios:919352723609e353</string>
+	<string>1:25470249753:ios:919352723609e353</string>
 	<key>DATABASE_URL</key>
-	<string>https://forex-flares.firebaseio.com</string>
+	<string>https://forexflares-3c9d0.firebaseio.com</string>
 </dict>
 </plist>
