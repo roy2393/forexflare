@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1074009534162",
+    "firebase_url": "https://forexflares-11a6e.firebaseio.com",
+    "project_id": "forexflares-11a6e",
+    "storage_bucket": "forexflares-11a6e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1074009534162:android:60226ef66b6be0db",
+        "android_client_info": {
+          "package_name": "com.forexflares"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1074009534162-kretdjgh754mqs26d39q0u5dprvkl630.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.forexflares",
+            "certificate_hash": "a9d468ef68312ee4095f222863da18855318c0c3"
+          }
+        },
+        {
+          "client_id": "1074009534162-5qlpehbdqbaeb624crghs42l0s9ga3r4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCwQcw6mLY_7ImcVdhcvU3adQZ9bBQ8LcY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1074009534162-5qlpehbdqbaeb624crghs42l0s9ga3r4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
