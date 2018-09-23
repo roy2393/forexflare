@@ -1,9 +1,10 @@
 import React from 'react';
-import {View, StyleSheet, Image, TouchableOpacity} from 'react-native';
+import {View, StyleSheet, Image, Text, TouchableOpacity} from 'react-native';
 import { createMaterialTopTabNavigator } from 'react-navigation';
 import NewsFeed from '../screens/NewsFeedScreen';
 import Messages from '../screens/MessageScreen2';
 import AppConst from '../../utils/AppConstants';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 export const TabNav = createMaterialTopTabNavigator({
     NewsFeed: { screen: NewsFeed, tabBarLabel: "News Feed" },
@@ -24,6 +25,13 @@ class AppTab extends React.Component{
                     />
                     </TouchableOpacity>
                 </View>
+            ),
+            headerRight: (
+                <TouchableOpacity activeOpacity = { .5 } style={{padding:5}} onPress={()=>{navigation.navigate('Browser', {uri: 'http://forexflares.com'});}}>
+                    <View style={{width: 22, heigth: 25, alignItems: 'center', marginRight: 10, backgroundColor: 'rgba(0,0,0,0.5)', borderRadius: 20}}>
+                        <Icon name="help-with-circle" size={16} color="white"/>
+                    </View>
+                </TouchableOpacity>
             )
         }
     }

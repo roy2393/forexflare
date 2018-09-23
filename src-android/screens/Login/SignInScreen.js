@@ -152,7 +152,7 @@ export default class LoginForm extends React.Component {
       render() {
         const { user, confirmResult } = this.state;
         return (
-          <ImageBackground source={require('../../../assets/img/gradientBG.png')} style={styles.container}>
+          <View style={styles.container}>
 
             <Image source={require('../../../assets/img/logo.png')} style={styles.logo}/>
 
@@ -164,7 +164,7 @@ export default class LoginForm extends React.Component {
               {this.renderMessage()}  
             </View>
 
-          </ImageBackground>
+          </View>
         );
       }
 }
