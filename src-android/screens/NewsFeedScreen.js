@@ -6,7 +6,7 @@ import {
         ListView,
         ActivityIndicator,
         Image,
-        Linking
+        RefreshControl
     } from 'react-native';
 import * as rssParser from 'react-native-rss-parser';
 import firebase from 'react-native-firebase';
@@ -32,6 +32,13 @@ class NewsFeedScreen extends React.Component{
             _nextPage: 0,
         };
 
+    }
+
+    _onRefresh = () => {
+      this.setState({isLoading: true});
+      this.fetchData(() => {
+        this.setState({isLoading: false});
+      });
     }
 
     _fetchData(callback) {
@@ -92,66 +99,79 @@ class NewsFeedScreen extends React.Component{
       }
 
       render() {
-        if (this.state.isLoading) {
-          return (
-            <View style={styles.container}>
+        let LOADING_VIEW = (
+          <View style={styles.container}>
               <ActivityIndicator size="large" />
             </View>
-          );
-        } else {
-          return (
-          <View>
+        )
+
+
+        let FEED = (
+          <ListView
+          dataSource={this.state.dataSource}
+          refreshControl={
+            <RefreshControl
+              refreshing={this.state.refreshing}
+              onRefresh={this._onRefresh}
+            />
+          }
+          renderRow={rowData => {
+            return (
+              <View style={styles.listItem}>
+                <View style={styles.imageWrapper}>
+                  <Image
+                    style={{ width: 70, height: 70 }}
+                    source={{
+                      uri: rowData.icon_img &&
+                        rowData.icon_img !== ''
+                        ? rowData.icon_img
+                        : thumbnail,
+                    }}
+                  />
+                </View>
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.title} onPress={() => this._openArticleLink(rowData)}>
+                    {rowData.title}
+                  </Text>
+                  <Text style={styles.subtitle}>
+                    {rowData.description}
+                  </Text>
+                </View>
+              </View>
+            );
+          }}
+          onEndReached={() =>
+            this.setState({ isLoadingMore: true }, () => this.fetchMore())}
+          renderFooter={() => {
+            return (
+              this.state.isLoadingMore &&
+              <View style={{ flex: 1, padding: 10 }}>
+                <ActivityIndicator size="small" />
+              </View>
+            );
+          }}
+        />
+        )
+
+        return(
+          <View style={{flex: 1}}>
             <Banner
               unitId={AppConstants.ADMOB_UNIT_ID}
-              size={"LARGE_BANNER"}
+              size={"SMART_BANNER"}
+              style={{width:'100%'}}
               request={request.build()}
               onAdLoaded={() => {
                 console.log('Ad');
               }}
             />
-            <ListView
-              dataSource={this.state.dataSource}
-              renderRow={rowData => {
-                return (
-                  <View style={styles.listItem}>
-                    <View style={styles.imageWrapper}>
-                      <Image
-                        style={{ width: 70, height: 70 }}
-                        source={{
-                          uri: rowData.icon_img &&
-                            rowData.icon_img !== ''
-                            ? rowData.icon_img
-                            : thumbnail,
-                        }}
-                      />
-                    </View>
-                    <View style={{ flex: 1 }}>
-                      <Text style={styles.title} onPress={() => this._openArticleLink(rowData)}>
-                        {rowData.title}
-                      </Text>
-                      <Text style={styles.subtitle}>
-                        {rowData.description}
-                      </Text>
-                    </View>
-                  </View>
-                );
-              }}
-              onEndReached={() =>
-                this.setState({ isLoadingMore: true }, () => this.fetchMore())}
-              renderFooter={() => {
-                return (
-                  this.state.isLoadingMore &&
-                  <View style={{ flex: 1, padding: 10 }}>
-                    <ActivityIndicator size="small" />
-                  </View>
-                );
-              }}
-            />
+
+            {this.state.isLoading ? LOADING_VIEW: FEED}
+
           </View>
           );
         }
       }
-    }
+
     
 const styles = StyleSheet.create({
       container: {
