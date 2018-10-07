@@ -9,6 +9,7 @@ export default {
             fontWeight: 'bold',
         }
     },
+    userIdKey: '@ForexFlaresApp:userId',
     ADMOB_ID: "ca-app-pub-7095254747971170~1072250543",
     ADMOB_UNIT_ID: "ca-app-pub-7095254747971170/1399553608"
 };

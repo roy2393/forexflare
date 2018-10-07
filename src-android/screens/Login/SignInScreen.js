@@ -6,13 +6,15 @@ import {
         Button,
         StyleSheet,
         Image,
-        ImageBackground,
+        AsyncStorage,
         TouchableOpacity
     } from 'react-native';
 import PhoneInput from 'react-native-phone-input'
-import AppConst from '../../../utils/AppConstants';
+import consts from '../../../utils/AppConstants';
 import firebase from 'react-native-firebase';
 import colors from '../../../utils/colors';
+import * as api from '../../../utils/api'
+import MessageToast from '../../components/MessageToast'
 
 export default class LoginForm extends React.Component {
   static navigationOptions = {
@@ -24,7 +26,9 @@ export default class LoginForm extends React.Component {
         this.unsubscribe = null;
         this.state = {
           user: null,
-          message: '',
+          messageType: null,
+          messageText: '',
+          messageDisplayTime: null,
           codeInput: '',
           confirmResult: null,
         };
@@ -41,7 +45,7 @@ export default class LoginForm extends React.Component {
             // User has been signed out, reset the state
             this.setState({
               user: null,
-              message: '',
+              message: {},
               codeInput: '',
               confirmResult: null,
             });
@@ -52,44 +56,56 @@ export default class LoginForm extends React.Component {
       componentWillUnmount() {
         if (this.unsubscribe) this.unsubscribe();
      }
+
+     removeMessage(time){
+      setTimeout(()=> {
+        this.setState({ messageType: null, messageText: null})
+      }, time ? time : 3000)
+     }
+
+     setUserCredentials = async (phoneNumber) => {
+      try {
+        await AsyncStorage.setItem(consts.userIdKey, phoneNumber);
+        this.props.navigation.navigate('App');
+      } catch (error) {
+        // Error saving data
+      }
+    }
    
      signIn = () => {
        const phoneNumber = this.phone.state.formattedNumber;
-       this.setState({ message: 'Sending OTP code on '+ phoneNumber });
-
-      //  setTimeout(()=>{
-      //   this.setState({ confirmResult: true, message: 'Code has been sent!' })
-      //   setTimeout(() => {
-      //     this.setState({ message: '' })
-      //   }, 3000)
-      //  }, 1000);
+       this.setState({ messageType: 'ongoing', messageText: 'Sending OTP code on '+ phoneNumber });
    
        firebase.auth().signInWithPhoneNumber(phoneNumber)
          .then(confirmResult => {
-          this.setState({ confirmResult, message: 'Code has been sent!' })
-          setTimeout(() => {
-            this.setState({ message: '' })
-          }, 3000)
+            this.setState({ confirmResult, messageType: 'success', messageText: 'Code Sent!'})
+            
+            this.removeMessage(3000)
           })
          .catch((error) => {
            console.log("Error - ", error, error.message);
-          this.setState({ message: `Sign In With Phone Number Error: ${error.message}` })
-         } );
+            this.setState({ messageType: 'error', messageText: `Sign In With Phone Number Error: ${error.message}`})
+          });
      };
 
      confirmCode = () => {
         const { codeInput, confirmResult } = this.state;
-    
+        
         if (confirmResult && codeInput.length) {
           confirmResult.confirm(codeInput)
-            .then((user) => {
-              this.setState({ message: 'Code Confirmed!' });
-
-              setTimeout(() => {
-                this.props.navigation.navigate('App');
-             }, 0)
+          .then((user) => {
+            this.setState({ user ,messageType: 'success', messageText: 'Code Confirmed!'});
+            
+              api.updateUserDetail(user.phoneNumber).then(userExist => {
+                this.setUserCredentials(user.phoneNumber)
+              })
+              .catch(error => {
+                console.log('Transaction failed: ', error);
+              });
             })
-            .catch(error => this.setState({ message: `Code Confirm Error: ${error.message}` }));
+            .catch(error => {
+              this.setState({ messageType: 'error', messageText: `Code Confirm Error: ${error.message}`})
+            });
         }
       };
 
@@ -153,6 +169,9 @@ export default class LoginForm extends React.Component {
         const { user, confirmResult } = this.state;
         return (
           <View style={styles.container}>
+            <View style={styles.msgBox}>
+              <MessageToast messageType={this.state.messageType} messageText={this.state.messageText} messageDisplayTime={this.state.messageDisplayTime}/>
+            </View>
 
             <Image source={require('../../../assets/img/logo.png')} style={styles.logo}/>
 
@@ -160,10 +179,8 @@ export default class LoginForm extends React.Component {
     
     
             {!user && confirmResult && this.renderVerificationCodeInput()}
-            <View style={styles.msgBox}>
-              {this.renderMessage()}  
-            </View>
 
+              <Image source={require('../../../assets/img/trading.png')} style={styles.bgPattern}/>
           </View>
         );
       }
@@ -203,7 +220,7 @@ const styles = StyleSheet.create({
     marginBottom: 50
   },
   button:{
-    backgroundColor: 'rgba(0,0,0,0.3)',
+    backgroundColor: colors.defaultBlue,
     borderRadius: 40,
     padding: 10,
   },
@@ -219,7 +236,7 @@ const styles = StyleSheet.create({
   msgBox:{
     width: '100%',
     height: 50,
-    marginTop: 50
+    marginTop: 0
   },
   inputContainer:{
 
@@ -227,7 +244,11 @@ const styles = StyleSheet.create({
   goBackBtn:{
     marginTop: 20, 
     fontSize: 14, 
-    color: colors.white, 
+    color: colors.defaultBlue, 
     textAlign: 'center'
+  },
+  bgPattern:{
+    marginTop: 20,
+    opacity: 0.2
   }
 })

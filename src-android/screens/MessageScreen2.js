@@ -10,6 +10,8 @@ import {
     } from 'react-native';
 // import styles from '../styles/styles';
 import firebase from 'react-native-firebase';
+import consts from '../../utils/AppConstants';
+import * as api from '../../utils/api'
 
 const EMPTY_MSG = "You've not received any message yet!"
 
@@ -17,17 +19,44 @@ class MessageScreen extends React.Component{
     constructor(props){
         super(props);
 
-        this.ref = firebase.firestore().collection('messages').orderBy("timestamp", "asc");
-        this.unsubscribe = null;
+        this.unsubscribe =  ()=>{};
 
         this.state = {
+            userId: null,
             messages: [],
             loading: true
         }
+        console.log('Message screen called - ');
+
+        this._retrieveUserId = this._retrieveUserId.bind(this)
     }
 
+    _retrieveUserId = async () => {
+        try {
+          const userId = await AsyncStorage.getItem(consts.userIdKey);
+          if (userId !== null) {
+            
+            api.getUserDetail(userId).then(user => {
+                if(user.data().isPaidUser){
+                    this.ref = firebase.firestore().collection('paidMessages').where("timestamp", ">", new Date(user.data().signUpDate)).orderBy("timestamp", "asc");
+                } else {
+                    this.ref = firebase.firestore().collection('messages').where("timestamp", ">",  new Date(user.data().signUpDate)).orderBy("timestamp", "asc");
+                }
+
+                this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate) 
+            })
+            .catch(error => {
+                console.log('Error - ', error);
+            })
+            
+          }
+         } catch (error) {
+           // Error retrieving data
+         }
+      }
+
     componentDidMount() {
-        this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate) 
+        this._retrieveUserId();
     }
     componentWillUnmount() {
         this.unsubscribe();
@@ -52,7 +81,6 @@ class MessageScreen extends React.Component{
 
     renderMessages(){
         let messages = [];
-        console.log("State - ", this.state);
         if(this.state.messages.length){
             messages =  this.state.messages;
             return (

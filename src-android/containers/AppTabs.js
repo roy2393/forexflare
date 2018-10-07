@@ -28,8 +28,8 @@ class AppTab extends React.Component{
             ),
             headerRight: (
                 <TouchableOpacity activeOpacity = { .5 } style={{padding:5}} onPress={()=>{navigation.navigate('Browser', {uri: 'http://forexflares.com'});}}>
-                    <View style={{width: 22, heigth: 25, alignItems: 'center', marginRight: 10, backgroundColor: 'rgba(0,0,0,0.5)', borderRadius: 20}}>
-                        <Icon name="help-with-circle" size={16} color="white"/>
+                    <View style={{width: 25, heigth: 25, alignItems: 'center', marginRight: 10, backgroundColor: 'rgba(0,0,0,0.5)', borderRadius: 20}}>
+                        <Text style={{color: 'white', lineHeight: 25}}>?</Text>
                     </View>
                 </TouchableOpacity>
             )

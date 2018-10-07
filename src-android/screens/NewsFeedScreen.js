@@ -25,7 +25,9 @@ class NewsFeedScreen extends React.Component{
         this.fetchMore = this._fetchMore.bind(this);
         this.fetchData = this._fetchData.bind(this);
         this.state = {
-            dataSource: null,
+            dataSource: new ListView.DataSource({
+              rowHasChanged: (r1, r2) => r1 !== r2,
+            }),
             isLoading: true,
             isLoadingMore: false,
             _data: null,
@@ -71,7 +73,6 @@ class NewsFeedScreen extends React.Component{
 
     componentDidMount() {
         //Start getting the first batch of data from froex flares
-        console.log("ADVORD - ", Banner, AdRequest, request.build());
         this.fetchData(responseJson => {
           // console.log("Response data - ", responseJson);
           let ds = new ListView.DataSource({
